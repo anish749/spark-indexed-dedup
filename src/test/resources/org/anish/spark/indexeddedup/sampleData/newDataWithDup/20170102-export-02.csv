@@ -1,0 +1,9 @@
+date,photo_id,photo_loc,event
+20170102,24,Bangalore,Event
+20170102,25,Mumbai,Junk
+20170102,26,Kolkata,Data
+20170102,27,Pune,event
+20170102,25,Mumbai,Junk
+20170102,26,Kolkata,Data
+20170102,27,Pune,event
+20170102,28,Pune,NewRecordButOldDate
