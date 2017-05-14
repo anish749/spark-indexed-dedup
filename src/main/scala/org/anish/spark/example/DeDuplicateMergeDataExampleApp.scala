@@ -24,7 +24,6 @@ object DeDuplicateMergeDataExampleApp {
       .load("data/smallData/alreadyExistingData/")
     val existing = existing_tmp.columns
       .foldLeft(existing_tmp)((acc_df: DataFrame, oldCol: String) => acc_df.withColumnRenamed(oldCol, oldCol.trim))
-      //      .withColumn("partitionColumn", col("bday_year"))
       .withColumn("partitionColumn", 'bday_year.cast(IntegerType))
       .cache()
 
@@ -36,7 +35,6 @@ object DeDuplicateMergeDataExampleApp {
       .load("data/smallData/newIncrement/")
     val newData = newData_tmp.columns
       .foldLeft(newData_tmp)((acc_df: DataFrame, oldCol: String) => acc_df.withColumnRenamed(oldCol, oldCol.trim))
-      //      .withColumn("partitionColumn", col("bday_year"))
       .withColumn("partitionColumn", 'bday_year.cast(IntegerType))
       .cache()
 
