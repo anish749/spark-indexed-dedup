@@ -5,7 +5,7 @@ An Apache Spark based solution to partition data and de-duplicate it while incre
 The code is described further along with the problem statement in a lot more detail in this blog post [here](https://anish749.github.io/spark/2017/05/13/using-hashset-based-indexes-apache-spark.html).
 
 
-The problem statement
+### The problem statement
 
 A table exists in Hive or any destination system and data is loaded every hour (or day) to this table. As per the source systems, it can generate duplicate data. However the final table should de-duplicate the data while loading. We assume that data is immutable, but can be delivered more than once, and we need a logic to filter these duplicates before appending the data to our master store.
 
