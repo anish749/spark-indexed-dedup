@@ -1,5 +1,8 @@
 package org.anish.spark.indexeddedup.estimator
 
+import java.net.URI
+
+import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.SparkContext
 
 /**
@@ -28,18 +31,15 @@ class SimpleDateBasedPartitionEstimator(inputFilePath: String, datePattern: Stri
 
   lazy val estimate: Int = {
     val datePatternRegex = datePattern.r
-    val datesInFiles = sparkContext
-      .wholeTextFiles(inputFilePath)
-      .map(_._1)
+    val fs = FileSystem.get(new URI(inputFilePath), sparkContext.hadoopConfiguration)
+    fs.listStatus(new Path(inputFilePath))
+      .map(_.getPath.toString)
       .map {
         case datePatternRegex(date) => date
         case _ => println("ERROR : did not match given regex")
       }
       .distinct
-      .collect
-      .toList
-
-    datesInFiles.length
+      .length
   }
 
   override def hashCode: Int = estimate
