@@ -63,6 +63,8 @@ class DeDuplicateMergeData(sparkContext: SparkContext, sqlContext: SQLContext) {
 
     // Step 1.1 - Partition the new data
     val newDataNumPartitions = newDataPartitionEstimator.estimate
+    require(newDataNumPartitions > 0, "Number of partitions of new data cannot be 0")
+
     val newDataPartitioner = new SimpleModuloPartitioner[Int, Row](newDataNumPartitions)
     val newDataPartitionedRDD = newDataPairRDD.partitionBy(newDataPartitioner)
 
@@ -71,6 +73,7 @@ class DeDuplicateMergeData(sparkContext: SparkContext, sqlContext: SQLContext) {
 
     // Step 1.3 - Creat a HashSet Index for the new data
     val newDataHashSet = createHashSetIndex(newDataPartitionedRDD, newDataPartitioner, primaryKeys)
+      .cache // This Hash Set should be cached as it would be saved later
 
 
     // Step 1.4 - For first load, return the new data.
@@ -99,6 +102,7 @@ class DeDuplicateMergeData(sparkContext: SparkContext, sqlContext: SQLContext) {
     else
       readHashSetIndex(hashSetIndexLocation).get // We use get, since we know that the HashSet is defined now
 
+    existingHashSetRDD.cache // Since this would be used multiple times
 
     // Step 3 - The actual merge operation
     val filteredRdd = filterOldRecordsUsingHashSet(deDupedNewData, existingHashSetRDD, newDataPartitioner, primaryKeys)
