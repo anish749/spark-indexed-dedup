@@ -33,6 +33,7 @@ class SimpleJoinSQL(sparkMaster: String, inputExistingDataPath: String, inputInc
       .show // Trigger action for benchmarking
 
     // Use One instead of count to get one record. One can be UDAF.
+    // The UDAF would be selecting one out of the given values.
     sqlContext.sql("select count(`data1`),count(`data2`),count(`data3`),count(`data4`),creation_date " +
       "from ( select lf.primarykey1,lf.`data1`,lf.`data2`,lf.`data3`,lf.`data4`, creation_date as creation_date " +
       "from (select *, log_id primarykey1 from newDataFeed) lf left outer join ( " +
