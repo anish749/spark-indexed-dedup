@@ -11,9 +11,10 @@ import org.apache.spark.{SparkConf, SparkContext}
   */
 object Benchmark {
 
-  val hdfsPathPrefix = "tempOutput/"
+//  val hdfsPathPrefix = "/data/cdp2/benchmarks/"
+    val hdfsPathPrefix = "tempOutput/"
 
-  val recordsPerPartition = 1e5.toInt
+  val recordsPerPartition = 1e1.toInt
 
   val existingDataPath = hdfsPathPrefix + "ramdomExistingData"
   val ramdomIncrementalDataWithDups = hdfsPathPrefix + "randomIncrementalDataWithDups"
@@ -42,30 +43,27 @@ object Benchmark {
     //        .doDedup
     //    }
 
-    time("Indexded Dedup - First Load - (Create HashMap)") {
-      // 44572466066 ns or 44572.466066 ms for 1e5
-      new IndexedDedup(
-        sparkMaster = sparkMaster,
-        inputExistingDataPath = null,
-        inputIncrementalDataPath = existingDataPath,
-        hashSetIndexLocation,
-        outputLocation = outputLocationIndexed + "_firstload")
-        .doDedup
-    }
+//    time("Indexded Dedup - First Load - (Create HashMap)") { // 44572466066 ns or 44572.466066 ms for 1e5 - yarn 106
+//      new IndexedDedup(
+//        sparkMaster = sparkMaster,
+//        inputExistingDataPath = null,
+//        inputIncrementalDataPath = existingDataPath,
+//        hashSetIndexLocation,
+//        outputLocation = outputLocationIndexed + "_firstload")
+//        .doDedup
+//    }
+//
+//    time("Indexded Dedup - Incremental Load - (Merge using HashMap)") { // 35690855950 ns or 35690.85595 ms for 1e5 - yarn 107
+//      new IndexedDedup(
+//        sparkMaster = sparkMaster,
+//        inputExistingDataPath = outputLocationIndexed + "_firstload",
+//        inputIncrementalDataPath = ramdomIncrementalDataWithDups,
+//        hashSetIndexLocation,
+//        outputLocation = outputLocationIndexed + "_secondload")
+//        .doDedup
+//    }
 
-    time("Indexded Dedup - Incremental Load - (Merge using HashMap)") {
-      // 35690855950 ns or 35690.85595 ms for 1e5
-      new IndexedDedup(
-        sparkMaster = sparkMaster,
-        inputExistingDataPath = outputLocationIndexed + "_firstload",
-        inputIncrementalDataPath = ramdomIncrementalDataWithDups,
-        hashSetIndexLocation,
-        outputLocation = outputLocationIndexed + "_secondload")
-        .doDedup
-    }
-
-    time("Simple SQL Join") {
-      //  263657031370 ns or 263657.03137 ms for 1e5
+    time("Simple SQL Join") { //  263657031370 ns or 263657.03137 ms for 1e5 - yarn 108
       new SimpleJoinSQL(
         sparkMaster = sparkMaster,
         inputExistingDataPath = existingDataPath,
