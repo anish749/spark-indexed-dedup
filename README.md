@@ -13,4 +13,8 @@ _Assumption:_ We have the data partitioned and data doesn’t get repeated acros
 
 _Sample use case:_ I used this on click stream data with an at least once delivery guarantee. However since the data is immutable, the source timestamp doesn’t change, and I partition the data based on this source timestamp.
 
-Please visit my blog for further understanding of this project
+More indepth explanation is [here](http://anishc.me/spark/using-hashset-based-indexes-apache-spark/)
+
+### Examples
+An example of using the APIs which are exposed outside is [here](https://github.com/anish749/spark-indexed-dedup/blob/master/src/main/scala/org/anish/spark/example/DeDuplicateMergeDataExampleApp.scala)
+
